@@ -1,0 +1,157 @@
+id = "openidea-platformio"
+name = "PlatformIO"
+version = "0.2.0"
+description = "Brings PlatformIO Core into OpenIDEA: build, upload, monitor, and manage boards and libraries for embedded projects without leaving the IDE or using VS Code"
+authors = []
+# Marketplace categories (up to 3): languages, themes, icon-themes, linters,
+# vcs, ai, frameworks, tools, other.
+categories = ["tools", "frameworks"]
+icon = "icons/platformio.svg"
+engines.openidea = "^1.4"
+# Built by `openidea-plugin build`. The code is loaded the first time one of
+# its commands runs; the commands below show in Find Action before that.
+wasm = "dist/plugin.wasm"
+
+# What the code may do. The user approves these when installing.
+[capabilities]
+required = [
+  "project.read",
+  "project.write",
+  "process:python3",
+  "process:sh",
+  "fs.read:~/.platformio",
+  "storage",
+]
+
+[[contributes.views]]
+id = "platformio"
+title = "PlatformIO"
+icon = "icons/platformio.svg"
+# The bottom dock, whose stripe button sits at the bottom left of the window and
+# whose panel spans the window's width: the most room for build and monitor output.
+location = "bottom"
+
+[[contributes.fileIcons]]
+id = "platformio-ini"
+patterns = ["platformio.ini"]
+icon = "icons/platformio.svg"
+
+[[contributes.commands]]
+id = "build"
+title = "PlatformIO: Build"
+category = "PlatformIO"
+icon = "compile"
+
+[[contributes.commands]]
+id = "upload"
+title = "PlatformIO: Upload"
+category = "PlatformIO"
+icon = "upload"
+
+[[contributes.commands]]
+id = "upload-monitor"
+title = "PlatformIO: Upload and Monitor"
+category = "PlatformIO"
+icon = "output"
+
+[[contributes.commands]]
+id = "monitor"
+title = "PlatformIO: Monitor"
+category = "PlatformIO"
+icon = "diagnostic"
+
+[[contributes.commands]]
+id = "check"
+title = "PlatformIO: Check"
+category = "PlatformIO"
+icon = "checked"
+
+[[contributes.commands]]
+id = "clean"
+title = "PlatformIO: Clean"
+category = "PlatformIO"
+icon = "clean"
+
+[[contributes.commands]]
+id = "add-board"
+title = "PlatformIO: Add Board"
+category = "PlatformIO"
+icon = "add"
+
+[[contributes.commands]]
+id = "detect-board"
+title = "PlatformIO: Detect Board"
+category = "PlatformIO"
+icon = "device"
+
+[[contributes.commands]]
+id = "install-python"
+title = "PlatformIO: Install Python 3"
+category = "PlatformIO"
+icon = "snake"
+
+[[contributes.commands]]
+id = "install-core"
+title = "PlatformIO: Install Core"
+category = "PlatformIO"
+icon = "download"
+
+[[contributes.commands]]
+id = "core-version"
+title = "PlatformIO: Show Core Version"
+category = "PlatformIO"
+icon = "info"
+
+[[contributes.commands]]
+id = "upgrade-core"
+title = "PlatformIO: Upgrade Core"
+category = "PlatformIO"
+icon = "arrow"
+
+[[contributes.commands]]
+id = "terminal"
+title = "PlatformIO: Terminal"
+category = "PlatformIO"
+icon = "terminal"
+
+[[contributes.commands]]
+id = "build-check"
+title = "PlatformIO: Build and Check"
+category = "PlatformIO"
+icon = "text"
+
+[[contributes.commands]]
+id = "test"
+title = "PlatformIO: Test"
+category = "PlatformIO"
+icon = "folder"
+
+[[contributes.commands]]
+id = "set-port"
+title = "PlatformIO: Set Port"
+category = "PlatformIO"
+icon = "plug"
+
+[[contributes.commands]]
+id = "update-index"
+title = "PlatformIO: Update Code Index"
+category = "PlatformIO"
+icon = "find"
+
+[[contributes.commands]]
+id = "run-command"
+title = "PlatformIO: Run Command"
+category = "PlatformIO"
+icon = "run"
+
+[[contributes.commands]]
+id = "remove-env"
+title = "PlatformIO: Remove Environment"
+category = "PlatformIO"
+icon = "remove"
+
+[[contributes.commands]]
+id = "add-library"
+title = "PlatformIO: Add Library"
+category = "PlatformIO"
+icon = "addExternalNode"
