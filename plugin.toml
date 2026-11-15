@@ -1,11 +1,11 @@
-id = "openidea-platformio"
+id = "openidea-darwin.openidea-platformio"
 name = "PlatformIO"
 version = "0.2.0"
 description = "Brings PlatformIO Core into OpenIDEA: build, upload, monitor, and manage boards and libraries for embedded projects without leaving the IDE or using VS Code"
-authors = []
+authors = ["Darwin Buelo"]
 # Marketplace categories (up to 3): languages, themes, icon-themes, linters,
 # vcs, ai, frameworks, tools, other.
-categories = ["tools", "frameworks"]
+categories = ["tools", "frameworks", "language"]
 icon = "icons/platformio.svg"
 engines.openidea = "^1.4"
 # Built by `openidea-plugin build`. The code is loaded the first time one of
