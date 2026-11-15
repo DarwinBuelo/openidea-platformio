@@ -91,4 +91,8 @@ The plugin requests these capabilities (approved on install):
 
 ## License
 
-See the upstream OpenIDEA / PlatformIO projects for licensing of bundled marks and Core. Plugin source licensing to be confirmed.
+This plugin's own source code is licensed under the Apache License, Version 2.0
+(see [LICENSE](LICENSE)). Upstream components retain their own licenses:
+PlatformIO Core and its toolchains/packages are Apache-2.0, and the PlatformIO
+mark copied into `icons/platformio.svg` is used with attribution under the
+extension's Apache-2.0 terms (the PlatformIO trademark itself is not granted).

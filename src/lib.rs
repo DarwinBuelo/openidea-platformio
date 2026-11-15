@@ -1212,6 +1212,17 @@ fn write_clangd_config(project: &openidea_plugin::host::Project) {
         }
     }
 
+    // Preserve any user-provided CompileFlags.Add entries from an existing
+    // .clangd so custom defines/flags survive an automatic or manual index
+    // update instead of being overwritten.
+    if let Ok(existing) = project.read_file(".clangd") {
+        for entry in extract_clangd_add_entries(&existing) {
+            if !add.contains(&entry) {
+                add.push(entry);
+            }
+        }
+    }
+
     let remove = "[-m*, -f*, -W*, -O*, -g*, -gdwarf-*, -stack-protector*, -no-round-trip-args, -fdeprecated-macro, -ferror-limit*, -fmax-type-align=*, -fcommon, -fblocks, -fencode-extended-block-signature, -fregister-global-dtors-with-atexit, -fskip-odr-check-in-gmf, -fcxx-exceptions, -fexceptions, -fno-cxx-modules, -fno-implicit-modules, -fno-rtti, -fdwarf2-cfi-asm, -fstack-check, -mdarwin-stkchk-strong-link, -fcoverage-compilation-dir=*, -fdebug-compilation-dir=*, -fdepfile-entry=*, -fsyntax-only, -x, c++, -std=*]";
     // Determine the compiler driver to query for system include paths, so
     // clangd uses the toolchain's own standard headers (fixes va_list etc.).
@@ -1253,7 +1264,17 @@ fn write_clangd_config(project: &openidea_plugin::host::Project) {
         add.join(", "),
         remove
     );
-    let _ = project.write_file(".clangd", &clangd);
+    // Preserve top-level sections from an existing .clangd that the plugin does
+    // not manage (e.g. Diagnostics) instead of deleting them.
+    let mut final_clangd = clangd;
+    if let Ok(existing) = project.read_file(".clangd") {
+        let extra = preserve_clangd_sections(&existing);
+        if !extra.trim().is_empty() {
+            final_clangd.push('\n');
+            final_clangd.push_str(&extra);
+        }
+    }
+    let _ = project.write_file(".clangd", &final_clangd);
 }
 
 fn update_code_index(project: &openidea_plugin::host::Project, root: &str) {
@@ -1747,3 +1768,59 @@ mod tests {
     }
 }
 
+
+fn extract_clangd_add_entries(text: &str) -> Vec<String> {
+    let mut out = Vec::new();
+    if let Some(pos) = text.find("Add:") {
+        let rest = &text[pos + 4..];
+        if let Some(start) = rest.find('[') {
+            if let Some(end) = rest[start..].find(']') {
+                let inner = &rest[start + 1..start + end];
+                for part in inner.split(',') {
+                    let t = part.trim();
+                    if !t.is_empty() && !out.contains(&t.to_string()) {
+                        out.push(t.to_string());
+                    }
+                }
+            }
+        }
+    }
+    out
+}
+
+fn preserve_clangd_sections(text: &str) -> String {
+    let lines: Vec<&str> = text.lines().collect();
+    let mut result = String::new();
+    let mut i = 0;
+    while i < lines.len() {
+        let line = lines[i];
+        if !line.is_empty()
+            && !line.starts_with(' ')
+            && !line.starts_with('\t')
+            && line.trim_end().ends_with(':')
+        {
+            let key = line.trim().trim_end_matches(':').trim();
+            let start = i;
+            i += 1;
+            while i < lines.len()
+                && (lines[i].is_empty()
+                    || lines[i].starts_with(' ')
+                    || lines[i].starts_with('\t'))
+            {
+                i += 1;
+            }
+            if key != "CompileFlags" {
+                for l in &lines[start..i] {
+                    result.push_str(l);
+                    result.push('\n');
+                }
+                if i < lines.len() && !result.ends_with("\n\n") {
+                    result.push('\n');
+                }
+            }
+        } else {
+            i += 1;
+        }
+    }
+    result
+}

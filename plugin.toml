@@ -1,6 +1,6 @@
-id = "openidea-darwin.openidea-platformio"
+id = "darwin.platformio"
 name = "PlatformIO"
-version = "0.2.0"
+version = "0.1.0"
 description = "Brings PlatformIO Core into OpenIDEA: build, upload, monitor, and manage boards and libraries for embedded projects without leaving the IDE or using VS Code"
 authors = ["Darwin Buelo"]
 # Marketplace categories (up to 3): languages, themes, icon-themes, linters,
